@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <string>
 
-#if defined WIN32 || define WIN64
+#if defined WIN32 || defined WIN64
 	#ifndef DRAWING_TIMEB
 		#define DRAWING_TIMEB
 		typedef struct _timeb TimeB;		/*!< @brief define a TimeB structure */
@@ -64,7 +64,7 @@ inline void operator-=( TimeB &TimeToModify, int Milliseconds )
 {
 	if ( Milliseconds < 0 )
 	{
-		AddTime( TimeToModify, -Milliseconds );
+		TimeToModify += -Milliseconds;
 		return;
 	}
 

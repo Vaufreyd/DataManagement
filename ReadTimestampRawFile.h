@@ -17,6 +17,8 @@
 #include <Windows.h>
 #endif
 
+namespace MobileRGBD {
+
 /**
  * @class ReadTimestampRawFile ReadTimestampRawFile.cpp ReadTimestampRawFile.h
  * @brief Abstract class to read a timestamp file associated to a raw file. The timstamp data
@@ -124,5 +126,7 @@ protected:
 	DataFile fRaw;									/*!< @brief DataFile object to read usual or compressed raw files. */
 	std::string RawFileName;						/*!< @brief Store name of the raw file */
 };
+
+} // namespace MobileRGBD
 
 #endif // __READ_TIMESTAMP_RAW_FILE__

@@ -9,6 +9,8 @@
 
 #include <string.h>
 
+using namespace MobileRGBD;
+
 /** @brief Constructor. Create a ReadTimestampRawFile object using specific files (timestamp + raw).
  *
  * @param WorkingFile [in] Name of the timestamp file to open (even with '/' separator under Windows as Windows handles it also as a folder/file separator).

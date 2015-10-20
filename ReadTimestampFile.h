@@ -14,6 +14,8 @@
 #include "DataFile.h"
 #include "ReadTimestamp.h"
 
+namespace MobileRGBD {
+
 /**
  * @class ReadTimestampFile ReadTimestampFile.cpp ReadTimestampFile.h
  * @brief Read file with timestamp and data on each files. For each line,
@@ -96,5 +98,7 @@ public:
 
 	char * DataBuffer;		/*!< @brief Pointer on the first character of the data on the current line. */
 };
+
+} // using namespace MobileRGBD;
 
 #endif // __READ_TIMESTAMP_FILE__

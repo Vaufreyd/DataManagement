@@ -15,6 +15,8 @@
 #include "DataFile.h"
 #include "TimestampTools.h"
 
+namespace MobileRGBD {
+
 /**
  * @class ReadTimestamp ReadTimestamp.cpp ReadTimestamp.h
  * @brief Read timestamp files, i.e. files with timestamp at beginning of each line.
@@ -34,14 +36,15 @@
 class ReadTimestamp
 {
 public:
-	const size_t DefaultLineBufferSize =  10*1024*1024;		/*!< @brief Default buffer size for line reading (default 10MiB) */
+	static const size_t DefaultLineBufferSize;					/*!< @brief Default buffer size for line reading (default 10 MiB) */
+	static const unsigned short int DefaultValidityTimeInMs;	/*!< @brief When searching for a specified timestamp, DefaultValidityTimeInMs specifies a threshold to for validity (33ms). */
 	
 	/** @brief Constructor. Create a ReadTimeStamp object using specific file.
 	 *
 	 * @param FileName [in] Name of the file to open (even with '/' separator under Windows as Windows handles it also as a folder/file separator).
 	 * @param SizeOfLineBuffer [in] Size of buffer to read each line of the file (default=DefaultLineBufferSize).
 	 */
-	ReadTimestamp( const std::string& FileName, size_t SizeOfLineBuffer = DefaultLineBufferSize );
+	ReadTimestamp( const std::string& FileName, size_t SizeOfLineBuffer = (size_t)DefaultLineBufferSize );
 
 	/** @brief virtual destructor (always).
 	 */
@@ -55,8 +58,6 @@ public:
 	 */
 	void Close();
 
-	// Search for a suitable timestamp
-	const unsigned short int DefaultValidityTimeInMs = 33;		/*!< @brief When searching for a specified timestamp, DefaultValidityTimeInMs specifies a threshold to for validity. */
 
 	/** @brief Search for a specific timestamp in the file.
 	 *
@@ -110,5 +111,7 @@ protected:
 	long int PreviousTimestampPosInFile[2];		/*!< @brief Store previous position in file in order to permit rewind. */
 	TimeB PreviousTimestamp;					/*!< @brief Value of the preivous timestamp. */
 };
+
+} // namespace MobileRGBD
 
 #endif // __READ_TIMESTAMP__

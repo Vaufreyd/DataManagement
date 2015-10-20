@@ -8,6 +8,10 @@
 #include "ReadTimestamp.h"
 
 using namespace std;
+using namespace MobileRGBD;
+
+const size_t ReadTimestamp::DefaultLineBufferSize =  10*1024*1024;		/*!< @brief Default buffer size for line reading (default 10MiB) */
+const unsigned short int ReadTimestamp::DefaultValidityTimeInMs = 33;	/*!< @brief When searching for a specified timestamp, DefaultValidityTimeInMs specifies a threshold to for validity (33ms). */
 
 /** @brief Constructor. Create a ReadTimeStamp object using specific file.
  *
@@ -17,7 +21,6 @@ using namespace std;
 ReadTimestamp::ReadTimestamp( const string& FileName, size_t SizeOfLineBuffer /* = 10 MB */ )
 {
 	// init internal variables
-	CorrectTime = 0;
 	FiletoOpen = FileName;
 	EndOfTimestampPosition = 0;
 	CurrentTimestamp.time = 0;
@@ -55,7 +58,7 @@ void ReadTimestamp::Reinit()
 	if ( fin == (FILE*)NULL )
 	{
 #ifdef DEBUG
-		fprintf( stderr, "Try to open '%s'\n", FiletoOpen.c_str() );
+		// fprintf( stderr, "Try to open '%s'\n", FiletoOpen.c_str() );
 #endif
 		fin.Open( FiletoOpen.c_str(), DataFile::READ_MODE );
 	}
@@ -118,19 +121,6 @@ bool ReadTimestamp::SearchDataForTimestamp(const TimeB &RequestedTimestamp, unsi
 
 	while( CurrentTimestampIsInitialized == true )
 	{
-		if ( CorrectTime != 0 )
-		{
-			if ( CorrectTime > 0 )
-			{
-				// Correct time if needed
-				AddTime( CurrentTimestamp, CorrectTime );
-			}
-			else
-			{
-				MinTime( CurrentTimestamp, CorrectTime );
-			}
-		}
-
 		int Comp = CompareTime( RequestedTimestamp, CurrentTimestamp );
 
 		// Requested time stamp is in future
@@ -263,7 +253,7 @@ bool ReadTimestamp::GetNextTimestamp()
  *
  * @return True is the rewind was possible and done.
  */	
-bool Rewind()
+bool ReadTimestamp::Rewind()
 {
 	if ( fin != (FILE*)NULL )
 	{

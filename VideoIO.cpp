@@ -11,7 +11,7 @@
 	#pragma warning(disable : 4996) // disable warning about non secure printf and scanf function
 #endif
 
-// Support for avconv orf vlc later will be added later
+// Support for avconv or vlc later will be added later
 const char * VideoIO::VideoProgram = "ffmpeg ";		/*!< @brief Program name to use for wideo reading */
 const char * VideoIO::ParamProgram = "ffprobe ";		/*!< @brief Define program to gain information about video */
 
@@ -51,7 +51,11 @@ void VideoIO::Allocate(size_t NewBufferSize)
  */
 VideoIO::VideoIO() :
 	LogLevel(16),				// Show errors only by default
+#ifdef USE_OLD_FFMPEG
+	ShowInfos(SHOW_BANNER),		// Show banner
+#else
 	ShowInfos(SHOW_NOTHING),	// Do not show banner or stats
+#endif
 	InternalBuffer(nullptr),	// Empty buffer
 	SizeOfBuffer(0)
 {

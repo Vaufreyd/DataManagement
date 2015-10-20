@@ -92,8 +92,21 @@ public:
 	 * @param VideoImg [in,out] The cv::Mat to fill with the next frame.
 	 * @return true if the image has been read and succefully push in VideoImg.
 	 */
-	bool ReadFrame( cv::Mat& VideoImg );
+	bool ReadFrame( cv::Mat& VideoImg ); 
 
+	/** @brief Read one frame from an input video stream and fill it in a cv::Mat in BGR.
+	 *         The image will be Width x Height in BGR (24 bits).
+	 *
+	 * @param VideoImg [in,out] The cv::Mat to fill with the next frame.
+	 */
+	VideoIO& operator>>( cv::Mat& VideoImg )
+	{
+		if ( ReadFrame( VideoImg ) == false )
+		{
+			throw "Unable to read videoframe";
+		}
+		return *this;
+	}
 
 	/** @brief Write one frame to an output video stream. If the image is not in BGR
 	 *         or have not the right size, a transcoded/rescaled copy of this image
@@ -101,6 +114,21 @@ public:
 	 *
 	 * @param VideoImg [in] The cv::Mat to write as the next frame.
 	 * @return true if the image has been write succefully.
+	 */
+	VideoIO& operator<<( const cv::Mat& VideoImg )
+	{
+		if ( WriteFrame( VideoImg ) == false )
+		{
+			throw "Unable to write videoframe";
+		}
+		return *this;
+	}
+
+	/** @brief Write one frame to an output video stream. If the image is not in BGR
+	 *         or have not the right size, a transcoded/rescaled copy of this image
+	 *		   will be created.
+	 *
+	 * @param VideoImg [in] The cv::Mat to write as the next frame.
 	 */
 	bool WriteFrame( const cv::Mat& VideoImg );
 
@@ -138,6 +166,9 @@ protected:
 	 */
 	void Allocate(size_t NewBufferSize);	
 };
+
+
+
 
 
 #endif	// __VIDEO_IO_H__

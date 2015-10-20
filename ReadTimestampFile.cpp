@@ -8,6 +8,7 @@
 #include "ReadTimestampFile.h"
 
 using namespace std;
+using namespace MobileRGBD;
 
 /** @brief Constructor. Create a ReadTimestampFile object using specific file.
  *
