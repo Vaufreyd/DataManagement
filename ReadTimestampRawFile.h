@@ -115,6 +115,7 @@ public:
 
 public:
 	Omiscid::TemporaryMemoryBuffer FrameBuffer;		/*!< @brief A growing and autodeleting buffer (from Omiscid. See http://omiscid.gforge.inria.fr/) */
+	int IndexofFrameBuffer;							/*!< @brief Store starting index of current FrameBuffer */
 	int FrameSize;									/*!< @brief Size of each frame (or subframe) */
 	int StartingFrame;								/*!< @brief Number of the first frame of the file (permits to recontsruct zero based index) */
 	int CurrentIndex;								/*!< @brief Store current frame number in file (to prevent for uneeded fseek in file) */

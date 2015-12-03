@@ -29,6 +29,7 @@ ReadTimestampRawFile::ReadTimestampRawFile( const std::string &WorkingFile, cons
 	FrameSize = SizeOfFrame;
 
 	FrameBuffer.SetNewBufferSize(SizeOfFrame+1);
+	IndexofFrameBuffer = -1;
 }
 
 /** @brief Restart file at beginning (if file is closed, file is re-opened).
@@ -60,6 +61,10 @@ void ReadTimestampRawFile::Reinit()
 
 	// Reset file to begining
 	fin.Seek( 0L, SEEK_SET );
+
+	// Restore starting current indexes
+	IndexofFrameBuffer = -1;
+	CurrentIndex = 0;
 }
 
 /** @brief Search for the timestamp and if found and process it by calling ProcessElement. 
@@ -133,6 +138,12 @@ bool ReadTimestampRawFile::GetFrame( int WantedIndex )
 		}
 	}
 
+	// The frame buffer contains already data for this index
+	if ( Index == IndexofFrameBuffer )
+	{
+		return true;
+	}
+
 	// If we are in multiple mode, we want to load all frame at once
 	// Default values for single mode
 	int LoadSize;
@@ -172,12 +183,14 @@ bool ReadTimestampRawFile::GetFrame( int WantedIndex )
 		{
 			return false;
 		}
+		IndexofFrameBuffer = Index;
 		CurrentIndex += NumberOfSubFrames;
 		return true;
 	}
 
 	// Try to go to new position and read a frame
 	int64_t NewPos = (int64_t)Index*(int64_t)FrameSize;
+
 	if ( fRaw.Seek( NewPos, SEEK_SET ) != 0 )
 	{
 		return false;
@@ -187,6 +200,8 @@ bool ReadTimestampRawFile::GetFrame( int WantedIndex )
 		return false;
 	}
 
+	// Data in memory buffer is Index
+	IndexofFrameBuffer = Index;
 	// Current Index is now the next one
 	CurrentIndex = Index + NumberOfSubFrames;
 

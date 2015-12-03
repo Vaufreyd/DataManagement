@@ -227,7 +227,7 @@ bool ReadTimestamp::GetNextTimestamp()
 		PreviousTimestamp.timezone = CurrentTimestamp.timezone;
 
 		// try to parse line
-		if ( sscanf( LineBuffer, "%d.%d%*[ \t]%n", &iTmp, &lTimestamp.millitm, &length ) != 2 )
+		if ( sscanf( LineBuffer, "%d.%hu%*[ \t]%n", &iTmp, &lTimestamp.millitm, &length ) != 2 )
 		{
 			continue;
 		}

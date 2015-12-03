@@ -11,7 +11,11 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+#include <string>
+
 #include "Pipe.h"
+
+namespace MobileRGBD {
 
 /**
  * @class DataFile DataFile.cpp DataFile.h
@@ -92,7 +96,7 @@ public:
 	 */
 	int GetPos(fpos_t *pos);
 
-	/** @brief Retrive current position in a file/pipe as a fpos_t_ structure (identical to fsetpos).
+	/** @brief Retrieve current position in a file/pipe as a fpos_t_ structure (identical to fsetpos).
 	 *
 	 * @param pos [in] pointer to a fpos_t structure to use to set current pos in file/pipe.
 	 * @return error code, same as fsetpos.
@@ -104,8 +108,48 @@ public:
 	 */
 	bool IsOpen() { return (InternalFile != nullptr); }
 
+	/** @brief Check if a file exists
+	 *
+	 * @param FileName [in] File name.
+	 * @return true if file actually exists
+	 */
+	static bool FileOrFolderExists(  const char * FileName );
+
+	static bool OpenCompressedVersionFirst;	/*!< Say that we want to try to open compressed version first. Useful when data are over the network. Default, false. */
+
 protected:
-	bool IsPipe;	/*!< Say that the InternalFile is a pipe or a usual file. Defailt, false. */
+	bool IsPipe;						/*!< Say that the InternalFile is a pipe or a usual file. Default, false. */
+	int64_t Pos;						/*!< Say that the InternalFile is a pipe or a usual file. Default, false. */
+	std::string CompressedFileName;
+	static const size_t DropBufferSize = 1024*1024;
+	static char DropBuffer[DropBufferSize];			/*!< Share 1 Mib buffer to drop data when seeking forward in pipes */
+
+	/** @brief Open a file *always in binary mode*.
+	 *
+	 * @param Filename [in] The file name.
+	 * @param eMode [in] The width of the video stream.
+	 * @return true if the file version is opened.
+	 */
+	bool InternalOpen( const char * Filename, int eMode = READ_MODE );
+
+	/** @brief Open a 7z version file *always in binary mode*.
+	 *
+	 * @param Filename [in] The file name (without .7z extension)
+	 * @param eMode [in] The width of the video stream.
+	 * @return true if the 7zip is opened.
+	 */
+	bool InternalOpenCompressedVersion( const char * Filename, int eMode = READ_MODE );
+
+	/** @brief Open a 7z file *always in binary mode*.
+	 *
+	 * @param Filename [in] The 7zip file name.
+	 * @param eMode [in] The width of the video stream.
+	 * @return true if the 7zip is opened.
+	 */
+	bool InternalOpenCompressed( const char * Filename, int eMode = READ_MODE );
 };
+
+
+} // namespace MobileRGBD
 
 #endif // __READ_DATA_H__
