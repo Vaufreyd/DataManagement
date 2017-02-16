@@ -81,7 +81,7 @@ public:
 	 * @param UserData [in] Pointer on a UserData pass to the ProcessElement function (default=nullptr).
 	 * @return True if everything went fine.
 	 */
-	virtual bool ProcessElement( const TimeB &RequestTimestamp, void * UserData = nullptr ) = 0;
+	virtual bool ProcessElement( const TimeB &RequestTimestamp, void * UserData = nullptr ) { return false; };
 
 	/** @brief Get the frame number for the current data.
 	 *
